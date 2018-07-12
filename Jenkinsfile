@@ -35,6 +35,12 @@ pipeline {
         echo "${KERNEL_VERSION}"
       }
     }
+    stage('Checkpoint') {
+      agent none
+      steps {
+        checkpoint 'Checkpoint'
+      }
+    }
     stage('Parallel steps') {
       failFast true
       parallel {
