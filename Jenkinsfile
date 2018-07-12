@@ -58,7 +58,7 @@ pipeline {
   // Actions
   post {
     aborted {
-      echo 'OI ${params.Name}, why didn\'t you push my button?'
+      echo "OI ${params.Name}, why didn\'t you push my button?"
     }
   }
 }
