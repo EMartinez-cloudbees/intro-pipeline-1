@@ -20,5 +20,16 @@ pipeline {
         sh 'java -version'
       }
     }
+    stage('Deploy') {
+      options {
+        timeout(time: 60, unit: 'SECONDS')
+      }
+      input {
+        message "Should we continue?"
+      }
+      steps {
+        echo "Continuing with deployment"
+      }
+    }
   }
 }
