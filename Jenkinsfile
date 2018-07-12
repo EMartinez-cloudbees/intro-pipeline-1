@@ -18,6 +18,26 @@ pipeline {
         sh 'java -version'
       }
     }
+    stage('Testing') {
+      parallel {
+        stage('Java 8') {
+          agent { label 'jdk9' } // note this doesn't matter :)
+          steps {
+            container('maven8') { // this is your environment
+              sh 'mvn -v'
+            }
+          }
+        }
+        stage('Java 9') {
+          agent { label 'jdk8' }
+          steps {
+            container('maven9') {
+              sh 'mvn -v'
+            }
+          }
+        }
+      }
+    }
   }
   // Actions
   post {
