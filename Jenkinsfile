@@ -1,5 +1,8 @@
 pipeline {
   // Setup
+  libraries {
+    lib("SharedLibs")
+  }
   agent {
     label 'jdk8'
   }
@@ -36,6 +39,11 @@ pipeline {
             }
           }
         }
+      }
+    }
+    stage('Shared Lib') {
+      steps {
+        helloWorld("Jenkins")
       }
     }
   }
