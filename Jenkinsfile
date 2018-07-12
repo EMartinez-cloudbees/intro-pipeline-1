@@ -1,4 +1,5 @@
 pipeline {
+  // Setup
   agent {
     label 'jdk8'
   }
@@ -10,6 +11,7 @@ pipeline {
     PLANET = "Kev's World"
     TEST_USER = credentials('test-user')
   }
+  // Build
   stages {
     stage('Say Hello') {
       steps {
@@ -34,6 +36,12 @@ pipeline {
       steps {
         echo "Deploying ${APP_VERSION}."
       }
+    }
+  }
+  // Actions
+  post {
+    aborted {
+      echo 'OI ${params.Name}, why didn\'t you push my button?'
     }
   }
 }
