@@ -3,10 +3,6 @@ pipeline {
   agent {
     label 'jdk8'
   }
-  parameters {
-    string(name: 'Name', defaultValue: 'whoever you are',
-      description: 'Who should I say hi to?')
-  }
   environment {
     PLANET = "Kev's World"
     TEST_USER = credentials('test-user')
@@ -15,7 +11,7 @@ pipeline {
   stages {
     stage('Say Hello') {
       steps {
-        echo "Howdy ${params.Name}, welcome to ${PLANET}!!"
+        echo "Howdy, welcome to ${PLANET}!!"
         echo "${env.BUILD_ID}"
         echo "${TEST_USER_USR}"
         echo "${TEST_USER_PSW}"
@@ -39,26 +35,30 @@ pipeline {
         echo "${KERNEL_VERSION}"
       }
     }
-    // stage('Deploy') {
-    //   options {
-    //     timeout(time: 60, unit: 'SECONDS')
-    //   }
-    //   input {
-    //     message "Which Version?"
-    //     ok "Deploy"
-    //     parameters {
-    //         choice(name: 'APP_VERSION', choices: "v1.1\nv1.2\nv1.3", description: 'What to deploy?')
-    //     }
-    //   }
-    //   steps {
-    //     echo "Deploying ${APP_VERSION}."
-    //   }
-    // }
+    stage('Parallel steps') {
+      failFast true
+      parallel {
+        stage('Java 8') {
+          agent { label 'jdk8' }
+          steps {
+            sh 'java -version'
+            sleep time: 10, unit: 'SECONDS'
+          }
+        }
+        stage('Java 9') {
+          agent { label 'jdk9' }
+          steps {
+            sh 'java -version'
+            sleep time: 20, unit: 'SECONDS'
+          }
+        }
+      }
+    }
   }
   // Actions
   post {
-    aborted {
-      echo "OI ${params.Name}, why didn\'t you push my button?"
+    success {
+      echo "Yay"
     }
   }
 }
